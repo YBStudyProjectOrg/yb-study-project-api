@@ -17,9 +17,15 @@ UserSchema.methods.checkPassword = async function (password) {
   return result;
 };
 
+UserSchema.methods.serialize = function (password) {
+  const data = this.toJSON();
+  delete data.hashedPassword;
+  return data;
+};
+
 // static
-UserSchema.statics.findByUsername = function (req) {
-  return this.findOne({ name: req.params.userid }).exec();
+UserSchema.statics.findByUsername = async function (username) {
+  return await this.findOne({ username }).exec();
 };
 
 const user = mongoose.model("User", UserSchema);
