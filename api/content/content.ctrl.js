@@ -8,4 +8,4 @@ const _status = {
 };
 
 export const write = async (ctx) => { };
-export const modifiy = async (ctx) => { };
+export const modify = async (ctx) => { };
