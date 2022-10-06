@@ -3,6 +3,7 @@ import dbconnection from "./dbconnection";
 import livereloadMiddleware from "connect-livereload";
 import livereload from "livereload";
 import { auth } from "@API";
+import jwtMiddleware from "@/lib/jwtMiddleware";
 
 const app = express();
 const port = 4000;
@@ -22,6 +23,9 @@ app.listen(port, () => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api/auth", auth);
-
+//middleware
 app.use(livereloadMiddleware());
+app.use(jwtMiddleware);
+
+// routes
+app.use("/api/auth", auth);

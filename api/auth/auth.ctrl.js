@@ -15,6 +15,7 @@ export const register = async (req, res) => {
   const result = schema.validate(req.body);
   if (result.error) {
     res.status(400).json(result).end();
+    return;
   }
 
   const { username, password } = req.body;
@@ -23,6 +24,12 @@ export const register = async (req, res) => {
     username,
   });
 
+  const userExist = await UserSchema.findByUsername(username);
+  if (userExist) {
+    res.status(400).json({}).end();
+    return;
+  }
+
   await user.setPassword(password);
   await user.save();
 
@@ -30,6 +37,7 @@ export const register = async (req, res) => {
 
   res.json(data);
 };
+
 export const login = async (req, res) => {
   const { username, password } = req.body;
 
@@ -52,7 +60,17 @@ export const login = async (req, res) => {
     return;
   }
 
-  res.json(user.serialize());
+  const token = user.generateToken();
+  //res.coo;
+
+  res
+    .status(200)
+    .cookie("access_token", `Bearer ${token}`, {
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      httpOnly: true,
+    })
+    .json(user.serialize())
+    .end();
 };
 export const check = async (ctx) => {};
 export const logout = async (ctx) => {};
