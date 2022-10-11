@@ -4,6 +4,8 @@ import livereloadMiddleware from "connect-livereload";
 import livereload from "livereload";
 import { auth } from "@API";
 import jwtMiddleware from "@/lib/jwtMiddleware";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 const port = 4000;
